@@ -61,7 +61,7 @@ $(document).ready(function () {
         },
 
         init: function () {
-            var answerItems = $(".answer-item");
+            var answerItems = $(".answer-text");
             this.initAnswerElement($(answerItems[0]));
             this.initAnswerElement($(answerItems[1]));
             this.initAnswerElement($(answerItems[2]));
@@ -92,12 +92,12 @@ $(document).ready(function () {
 
         questions: [
             {
-                question: "sample question",
+                question: "This is a question and if you look below there are answers",
                 answers: [
-                    "answer 1",
-                    "*answer 2",
-                    "answer 3",
-                    "answer 4",
+                    "Answer 1",
+                    "*Answer 2",
+                    "Answer 3",
+                    "Answer 4",
                 ]
             },
             {
@@ -145,8 +145,10 @@ $(document).ready(function () {
                 var pane = this.uiPanes[i];
                 if (pane == jqPane) {
                     pane.removeClass("hidden");
+                    pane.addClass("fade-in");
                 } else {
                     pane.addClass("hidden");
+                    pane.removeClass("fade-in");
                 }
             }
         },

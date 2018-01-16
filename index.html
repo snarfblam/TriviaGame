@@ -11,40 +11,41 @@
 </head>
 
 <body>
-    <div id="intro-pane">
-        <p>This is a trivia quiz. Click the button.</p>
-        <button id="start-button">Start the quiz!</buton>
-    </div>
+    <div class="main">
+        <div id="intro-pane" class="pane">
+            <p>This is a trivia quiz. Click the button.</p>
+            <button id="start-button">Start the quiz!</buton>
+        </div>
 
-    <div id="question-pane" class="hidden">
-        <p>Time left:
-            <span id="timer">00:00</span>
-        </p>
-        <p id="question">question</p>
-        <ol id="answer-list">
-            <li class="answer-item clickable">answer</li>
-            <li class="answer-item clickable">answer</li>
-            <li class="answer-item clickable">answer</li>
-            <li class="answer-item clickable">answer</li>
-        </ol>
-    </div>
+        <div id="question-pane" class="hidden pane">
+            <p>Time left:
+                <span id="timer">00:00</span>
+            </p>
+            <p id="question">question</p>
+            <ol id="answer-list">
+                <li class="answer-item clickable"><span class="answer-label">A: </span><span class="answer-text">answer</span></li>
+                <li class="answer-item clickable"><span class="answer-label">B: </span><span class="answer-text">answer</span></li>
+                <li class="answer-item clickable"><span class="answer-label">C: </span><span class="answer-text">answer</span></li>
+                <li class="answer-item clickable"><span class="answer-label">D: </span><span class="answer-text">answer</span></li>
+            </ol>
+        </div>
 
-    <div id="answer-pane" class="hidden">
-        <p id="answer-result">Correct!</p>
-        <p id="correct-answer">The correct answer is "X".</p>
-        <img id="answer-image">
-    </div>
+        <div id="answer-pane" class="hidden pane">
+            <p id="answer-result">Correct!</p>
+            <p id="correct-answer">The correct answer is "X".</p>
+            <img id="answer-image">
+        </div>
 
-    <div id="final-result-pane" class="hidden">
-        <h3>Here are your results:</h3>
-        <p>Questions right:
-            <span id="tally-right">0</span>
-        </p>
-        <p>Questions wrong:
-            <span id="tally-wrong">0</span>
-        </p>
+        <div id="final-result-pane" class="hidden pane">
+            <h3>Here are your results:</h3>
+            <p>Questions right:
+                <span id="tally-right">0</span>
+            </p>
+            <p>Questions wrong:
+                <span id="tally-wrong">0</span>
+            </p>
+        </div>
     </div>
-
 </body>
 
 </html>
