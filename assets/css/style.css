@@ -106,6 +106,14 @@
         color:orange;
     }
 
+    #timer {
+        position: absolute;
+        left: 50%;
+        font-size: 2rem;
+        bottom: 13px;
+        margin-left: -1rem;
+    }
+
     .fade-in {
         opacity: 1;
         transition: visibility 0s, opacity .3s;
