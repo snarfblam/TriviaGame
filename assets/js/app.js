@@ -132,7 +132,84 @@ $(document).ready(function () {
                 ],
                 image: "rome.jpg",
                 details: "The Count of Flanders—a 12th century cleric in the court of Phillippe of Alsace—is credited for the original phrase, in French: \"Rome ne s’est pas faite en un jour.\""   
-            }
+            },
+            {
+                question: "Blamed on its high cost of living, what state has, by far, the largest percentage of adults still living with their parents?",
+                answers: [
+                    "Montana",
+                    "*New Jersey",
+                    "Nebraska",
+                    "Tennessee",
+                ],
+                image: "millineals_home.jpg",
+                details: "In 2015, 47% of New Jersey residents ages 18 to 34 were living in their parent’s home."
+            },
+            {
+                question: "What desert surrounds the city of Las Vegas?",
+                answers: [
+                    "*Mojave",
+                    "Sonoran",
+                    "Painted",
+                    "Great basin"
+                ],
+                image: "mojave.jpg",
+                details: "The Mojave Desert is the driest desert in North America. It's located insouthwestern United States, primarily within southeastern California and southern Nevada.",
+            },
+            {
+                question: "Fittingly, Nintendo honors its legendary mustachioed plumber on what date each year?",
+                answers: [
+                    "*Mar. 10",
+                    "Apr. 30",
+                    "Sep. 20",
+                    "Dec. 31",
+                ],
+                image: "mario03.png",
+                details: "National Mario Day is observed each year on March 10th and honors Mario from the popular Nintendo game.",
+            },
+            {
+                question: "Though still worth over $2 billion, who of the following lost the vast majority of his wealth due to a disastrous merger announced in January 2000?",
+                answers: [
+                    "Larry Ellison",
+                    "Bill Gates",
+                    "*Ted Turner",
+                    "Jeff Bezos",
+                ],
+                details: "Turner was Time Warner's biggest individual shareholder. It is estimated he lost as much as $7 billion when the stock collapsed in the wake of the merger.",
+                image: "turner.jpg",
+            },
+            {
+                question: "In the classic 1939 film <em>The Wizard of Oz</em>, the Wicked Witch of the West sports a large wart on which part of her face?",
+                answers: [
+                    "her nose",
+                    "*her chin",
+                    "her cheek",
+                    "her forehead",
+                ],
+                image: "witch.jpg",
+                details: "Margaret Hamilton plays the Wicked Witch of the West as a green-skinned witch dressed in a long black dress with a black pointed hat",
+            },
+            {
+                question: "\"The anatomical juxtaposition of two orbicularis oris muscles in a state of contraction\" is a fancy way of describing a what?",
+                answers: [
+                    "high five",
+                    "hug",
+                    "*kiss",
+                    "handshake",
+                ],
+                image: "lips",
+                details: "The orbicularis oris muscle is a complex of muscles in the lips that encircles the mouth."
+            },
+            {
+                question: "Thought to have inspired the name of a Dr. Seuss character, the French word \"grincheux\" means what in English? ",
+                answers: [
+                    "generous",
+                    "gigantic",
+                    "garlicky",
+                    "*grumpy",
+                ],
+                image: "grinch.jpg",
+                details: "The Grinch is the grumpy green main character of the children's book <em>How the Grinch Stole Christmas!</em>",
+            },
         ],
 
         uiAnswers_click: function (e, index) {
@@ -225,7 +302,7 @@ $(document).ready(function () {
                 this.correctAnswerCount++;
             } else {
                 this.uiCorrectAnswer.text("The correct answer is: " + this.currentQuestion.answers[this.correctAnswerIndex].substr(1));
-                this.uiAnswerResult.text("Wrong!");
+                this.uiAnswerResult.text("Incorrect");
                 this.incorrectAnswerCount++;
             }
 
@@ -243,7 +320,7 @@ $(document).ready(function () {
         },
 
         displayQuestion: function (question) {
-            this.uiQuestion.text(question.question);
+            this.uiQuestion.html(question.question);
             if(question.question.length > 70) {
                 this.uiQuestion.addClass("question-small-text");
             }else{
