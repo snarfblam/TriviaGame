@@ -34,6 +34,7 @@ $(document).ready(function () {
         uiQuestion: $("#question"),
         uiAnswerList: $("#answer-list"),
         uiAnswers: [],
+        uiSelection: $("#answer-selection"),
 
         uiAnswerResult: $("#answer-result"),
         uiCorrectAnswer: $("#correct-answer"),
@@ -62,10 +63,12 @@ $(document).ready(function () {
 
         init: function () {
             var answerItems = $(".answer-text");
-            this.initAnswerElement($(answerItems[0]));
-            this.initAnswerElement($(answerItems[1]));
-            this.initAnswerElement($(answerItems[2]));
-            this.initAnswerElement($(answerItems[3]));
+            var answerContainers = $(".answer-item");
+
+            this.initAnswerElement($(answerItems[0]), $(answerContainers[0]));
+            this.initAnswerElement($(answerItems[1]), $(answerContainers[1]));;
+            this.initAnswerElement($(answerItems[2]), $(answerContainers[2]));;
+            this.initAnswerElement($(answerItems[3]), $(answerContainers[3]));;
 
             this.uiPanes = [
                 this.uiIntroPane,
@@ -80,12 +83,16 @@ $(document).ready(function () {
         },
 
         /** Adds the specified element to this.uiAnswers and wires the click event */
-        initAnswerElement(jqElement) {
+        initAnswerElement(jqAnswer, jqContainer) {
             var self = this;
             var index = this.uiAnswers.length;
 
-            this.uiAnswers.push(jqElement);
-            jqElement.click(function (e) {
+            this.uiAnswers.push({
+                answer: jqAnswer,
+                container: jqContainer,
+                index: index,
+            });
+                jqContainer.click(function (e) {
                 self.uiAnswers_click(e, index);
             });
         },
@@ -112,10 +119,17 @@ $(document).ready(function () {
         ],
 
         uiAnswers_click: function (e, index) {
+            var self = this;
+
             if (!this.guessMade) {
                 this.guessMade = true;
                 this.selectedAnswerIndex = index;
-                setTimeout(this.displayAnswer.bind(this), this.timing.selectionMade);
+                this.setSelectedAnswerStyle();
+
+                setTimeout(function () {
+                    self.removeSelectedAnswerStyle();
+                    self.displayAnswer();
+                }, this.timing.selectionMade);
             }
         },
 
@@ -123,6 +137,18 @@ $(document).ready(function () {
             this.startQuiz();
         },
 
+
+        setSelectedAnswerStyle: function () {
+            this.uiAnswers[this.selectedAnswerIndex].container.addClass("answer-selected");
+            this.uiSelection.removeClass("hidden").addClass("position-" + this.selectedAnswerIndex);
+        },
+
+        removeSelectedAnswerStyle: function() {
+            for(var i = 0; i < this.uiAnswers.length; i++) {
+                this.uiAnswers[i].container.removeClass("answer-selected");
+                this.uiSelection.addClass("hidden").removeClass("position-0 position-1 position-2 position-3");
+            }
+        },
 
         startQuiz: function () {
             this.questionIndex = -1;
@@ -207,7 +233,7 @@ $(document).ready(function () {
                     answer = answer.substr(1);
                 }
 
-                this.uiAnswers[i].text(answer);
+                this.uiAnswers[i].answer.text(answer);
             }
         },
     };

@@ -128,25 +128,25 @@
     }
  
 
-    #selection {
+    #answer-selection {
         background: url("../images/selection.png");
         width: 312px;
         height: 48px;
         position: absolute;
     }
-    #selection.position-0 {
+    #answer-selection.position-0 {
         left: 29px;
         top: 217px;
     }
-    #selection.position-1 {
+    #answer-selection.position-1 {
         left: 389px;
         top: 217px;
     }
-    #selection.position-2 {
+    #answer-selection.position-2 {
         left: 29px;
         top: 284px;
     }
-    #selection.position-3 {
+    #answer-selection.position-3 {
         left: 389px;
         top: 284px;
     }
@@ -159,7 +159,7 @@
     }
 
     .hidden {
-        /* display:  none; */
+        display:  none;
     }
 
     .clickable {
