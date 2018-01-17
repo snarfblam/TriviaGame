@@ -196,7 +196,7 @@ $(document).ready(function () {
                     "*kiss",
                     "handshake",
                 ],
-                image: "lips",
+                image: "lips.jpg",
                 details: "The orbicularis oris muscle is a complex of muscles in the lips that encircles the mouth."
             },
             {
