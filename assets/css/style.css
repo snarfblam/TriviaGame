@@ -18,6 +18,17 @@
         color: white;
         font-family: "PT Sans", sans-serif;
     }
+    h1 {
+        font-size: 3rem;
+    }
+
+    h3 {
+        font-size: 2rem;
+    }
+
+    em {
+        font-style: italic;
+    }
 
     .main {
         margin: 0 auto;
@@ -49,6 +60,23 @@
     #logo {
     }
 
+    .single-row-button {
+        width: 720px;
+        height: 50px;
+        background: url("../images/single-row-button.png");
+        text-align: center;
+    }
+
+    #start-button {
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+        width: 400px;
+        height: 100%;
+        font-size: 1.5rem;
+    }
+
     #logo > p {
         background: url("../images/logo.png");
         background-position: center;
@@ -60,7 +88,7 @@
         text-shadow: -1px -1px 0px black, -1px 1px 0px black, 1px -1px 0px black, 1px 1px 0px black;
     }
     #question-pane {
-        background: url("../images/backdrop_question.png"), url("../images/backdrop_dim.png");
+        background: url("../images/Backdrop_question.png"), url("../images/backdrop_dim.png");
     }
 
     #question {
@@ -71,6 +99,10 @@
         height: 61px;
         font-size: 1.5rem;
         text-align: center;
+    }
+
+    #question.question-small-text {
+        font-size: 1.25rem;
     }
 
     .answer-item {
@@ -113,6 +145,42 @@
         color:orange;
     }
 
+    #answer-pane {
+        background: url("../images/Backdrop-answer.png"), url("../images/backdrop_dim.png");
+    }
+
+    #answer-pane>.single-row-button {
+        margin-top: 10px;
+    }
+
+    .answer-info {
+        position: absolute;
+        left: 80px;
+        width: 560px;
+        top: 80px;
+        height: 265px;
+    }
+
+    #correct-answer {
+        text-align: center;
+        margin-bottom: 3em;
+    }
+
+    #answer-image {
+        float: left;
+        width: 140px;
+        height: 140px;
+        object-fit: cover;
+        /* margin-top: 25px; */
+        margin-right: 10px;
+        margin-bottom: 10px;
+    }
+
+    #answer-result {
+        padding-top: 12px;
+        font-size: 1.5rem;
+    }
+
     #timer {
         position: absolute;
         left: 50%;
@@ -150,12 +218,10 @@
         left: 389px;
         top: 284px;
     }
-    h1 {
-        font-size: 3rem;
-    }
 
-    h3 {
-        font-size: 2rem;
+
+    .mt-100 {
+        margin-top: 100px;
     }
 
     .hidden {

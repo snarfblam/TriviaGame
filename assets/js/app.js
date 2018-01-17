@@ -39,10 +39,12 @@ $(document).ready(function () {
         uiAnswerResult: $("#answer-result"),
         uiCorrectAnswer: $("#correct-answer"),
         uiAnswerImage: $("#answer-image"),
+        uiAnswerDetails: $("#answer-details"),
 
         uiTallyRight: $("#tally-right"),
         uiTallyWrong: $("#tally-wrong"),
 
+        answerImagePath: "assets/images/answers/",
 
         // Per-game variables
         currentQuestion: null,
@@ -57,7 +59,7 @@ $(document).ready(function () {
 
         timing: {
             // delay after:
-            selectionMade: 1000,
+            selectionMade: 3000,
             answerShown: 5000,
         },
 
@@ -99,23 +101,38 @@ $(document).ready(function () {
 
         questions: [
             {
-                question: "This is a question and if you look below there are answers",
+                question: "Of the following famous movie one-liners, which is the only one that is NOT said by a character right before they fire a gun? ",
                 answers: [
-                    "Answer 1",
-                    "*Answer 2",
-                    "Answer 3",
-                    "Answer 4",
-                ]
+                    "\"Say hello to my little friend\"",
+                    "\"Well do ya, punk?\"",
+                    "*\"Get off my plane\"",
+                    "\"Hasta la vista, baby\"",
+                ],
+                image: "af1.jpg",
+                details: "In the film <em>Air Force One</em> President James Marshall says this line before knocking Korshunov off the back of the plane."
             },
             {
-                question: "second question",
+                question: "According to the Washington Post, as much as 20% of all power outages are caused by animals—especially which kind of animal?",
                 answers: [
-                    "response 2",
-                    "response 3",
-                    "response 1",
-                    "*response 4",
-                ]
+                    "Polar Bear",
+                    "*Squirrel",
+                    "Rhino",
+                    "Squid",
+                ],
+                image: "squirrel.jpg",
+                details: "It has been hypothesized that the threat to the infrastructure and services posed by squirrels may exceed that posed by terrorists."
             },
+            {
+                question: "To assure someone that great things take time to achieve, you might remind them that, according to a famous phrase, what \"wasn't built in a day\"?",
+                answers: [
+                    "*Rome",
+                    "the Silk Road",
+                    "Ryan Reynolds' six-pack",
+                    "the Colosseum"
+                ],
+                image: "rome.jpg",
+                details: "The Count of Flanders—a 12th century cleric in the court of Phillippe of Alsace—is credited for the original phrase, in French: \"Rome ne s’est pas faite en un jour.\""   
+            }
         ],
 
         uiAnswers_click: function (e, index) {
@@ -203,15 +220,20 @@ $(document).ready(function () {
 
             var correct = this.selectedAnswerIndex == this.correctAnswerIndex;
             if (correct) {
+                this.uiCorrectAnswer.text(this.currentQuestion.answers[this.correctAnswerIndex].substr(1));
                 this.uiAnswerResult.text("Correct!");
                 this.correctAnswerCount++;
             } else {
+                this.uiCorrectAnswer.text("The correct answer is: " + this.currentQuestion.answers[this.correctAnswerIndex].substr(1));
                 this.uiAnswerResult.text("Wrong!");
                 this.incorrectAnswerCount++;
             }
-            this.uiCorrectAnswer.text("The correct answer is: " + this.currentQuestion.answers[this.correctAnswerIndex]);
+
+            this.uiAnswerDetails.html(this.currentQuestion.details || "");
+            this.uiAnswerImage.attr("src", this.answerImagePath + this.currentQuestion.image);
 
             this.setVisiblePane(this.uiAnswerPane);
+
             setTimeout(function(){
                 var moreQuestions = self.displayNextQuestion();
                 if(!moreQuestions){
@@ -222,6 +244,11 @@ $(document).ready(function () {
 
         displayQuestion: function (question) {
             this.uiQuestion.text(question.question);
+            if(question.question.length > 70) {
+                this.uiQuestion.addClass("question-small-text");
+            }else{
+                this.uiQuestion.removeClass("question-small-text");
+            }
 
             for (var i = 0; i < question.answers.length; i++) {
                 var answer = question.answers[i];

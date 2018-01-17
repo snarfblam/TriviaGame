@@ -17,14 +17,16 @@
                 <p>Who wants to play
                     <br> A Trivia Quiz?</p>
             </div>
-            <button id="start-button">Start the quiz!</buton>
+            <div class="single-row-button mt-100">
+                <button id="start-button">Start the quiz!</buton>
+            </div>
         </div>
 
         <div id="question-pane" class="hidden pane">
             <p id="timer">30</p>
             <p id="question">question</p>
             <div id="answer-selection" class="hidden">
-                
+
             </div>
             <ol id="answer-list">
                 <li class="answer-item clickable">
@@ -47,9 +49,14 @@
         </div>
 
         <div id="answer-pane" class="hidden pane">
-            <p id="answer-result">Correct!</p>
-            <p id="correct-answer">The correct answer is "X".</p>
-            <img id="answer-image">
+            <div class="single-row-button">
+                <p id="answer-result">Correct!</p>
+            </div>
+            <div class="answer-info">
+                <p id="correct-answer">The correct answer is "X".</p>
+                <img id="answer-image" src="assets/images/answers/test.jpg">
+                <span id="answer-details">Some example text to test things out.</span>
+            </div>
         </div>
 
         <div id="final-result-pane" class="hidden pane">
