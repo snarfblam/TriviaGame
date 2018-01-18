@@ -199,6 +199,10 @@
         margin-left: -1rem;
     }
 
+    #timer.time-up {
+        color: red;
+    }
+
     .fade-in {
         opacity: 1;
         transition: visibility 0s, opacity .3s;

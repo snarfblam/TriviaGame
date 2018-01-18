@@ -43,25 +43,32 @@ $(document).ready(function () {
 
         uiTallyRight: $("#tally-right"),
         uiTallyWrong: $("#tally-wrong"),
+        uiTallyUnanswered: $("#tally-unanswered"),
 
         answerImagePath: "assets/images/answers/",
+
+        questionTimer: null,
+        currentQuestionTime: 0, // seconds
+        timePerQuestion: 15, // seconds
+        timing: {
+            // delay after:
+            selectionMade: 3000,
+            answerShown: 5000,
+        },
 
         // Per-game variables
         currentQuestion: null,
         questionIndex: -1,
         correctAnswerCount: 0,
         incorrectAnswerCount: 0,
+        unansweredCount: 0,
 
         // Per-question variables
         correctAnswerIndex: -1,
+        /** The selected answer, or -1 if no selection has been made (indicative if timer running out when checking if the correct answer was picked). */
         selectedAnswerIndex: -1,
         guessMade: false,
 
-        timing: {
-            // delay after:
-            selectionMade: 3000,
-            answerShown: 5000,
-        },
 
         init: function () {
             var answerItems = $(".answer-text");
@@ -94,7 +101,7 @@ $(document).ready(function () {
                 container: jqContainer,
                 index: index,
             });
-                jqContainer.click(function (e) {
+            jqContainer.click(function (e) {
                 self.uiAnswers_click(e, index);
             });
         },
@@ -131,7 +138,7 @@ $(document).ready(function () {
                     "the Colosseum"
                 ],
                 image: "rome.jpg",
-                details: "The Count of Flanders—a 12th century cleric in the court of Phillippe of Alsace—is credited for the original phrase, in French: \"Rome ne s’est pas faite en un jour.\""   
+                details: "The Count of Flanders—a 12th century cleric in the court of Phillippe of Alsace—is credited for the original phrase, in French: \"Rome ne s’est pas faite en un jour.\""
             },
             {
                 question: "Blamed on its high cost of living, what state has, by far, the largest percentage of adults still living with their parents?",
@@ -213,7 +220,14 @@ $(document).ready(function () {
         ],
 
         uiAnswers_click: function (e, index) {
+            this.selectAnswer(index);
+        },
+
+        /** Index of selected item, or -1 to indicate no selection was made (time up) */
+        selectAnswer: function (index) {
             var self = this;
+
+            this.stopTimer();
 
             if (!this.guessMade) {
                 this.guessMade = true;
@@ -233,12 +247,15 @@ $(document).ready(function () {
 
 
         setSelectedAnswerStyle: function () {
-            this.uiAnswers[this.selectedAnswerIndex].container.addClass("answer-selected");
-            this.uiSelection.removeClass("hidden").addClass("position-" + this.selectedAnswerIndex);
+            if (this.selectedAnswerIndex >= 0) { // was a selection made?
+                // Then use the selection background and style
+                this.uiAnswers[this.selectedAnswerIndex].container.addClass("answer-selected");
+                this.uiSelection.removeClass("hidden").addClass("position-" + this.selectedAnswerIndex);
+            }
         },
 
-        removeSelectedAnswerStyle: function() {
-            for(var i = 0; i < this.uiAnswers.length; i++) {
+        removeSelectedAnswerStyle: function () {
+            for (var i = 0; i < this.uiAnswers.length; i++) {
                 this.uiAnswers[i].container.removeClass("answer-selected");
                 this.uiSelection.addClass("hidden").removeClass("position-0 position-1 position-2 position-3");
             }
@@ -257,6 +274,7 @@ $(document).ready(function () {
         endQuiz: function () {
             this.uiTallyWrong.text(this.incorrectAnswerCount);
             this.uiTallyRight.text(this.correctAnswerCount);
+            this.uiTallyUnanswered.text(this.unansweredCount);
             this.setVisiblePane(this.uiFinalResultPane);
         },
 
@@ -288,7 +306,7 @@ $(document).ready(function () {
             this.displayQuestion(this.currentQuestion);
 
             this.setVisiblePane(this.uiQuestionPane);
-            
+
             return true; // We found a question
         },
 
@@ -300,10 +318,14 @@ $(document).ready(function () {
                 this.uiCorrectAnswer.text(this.currentQuestion.answers[this.correctAnswerIndex].substr(1));
                 this.uiAnswerResult.text("Correct!");
                 this.correctAnswerCount++;
-            } else {
+            } else if(this.selectedAnswerIndex >= 0) { // incorrect
                 this.uiCorrectAnswer.text("The correct answer is: " + this.currentQuestion.answers[this.correctAnswerIndex].substr(1));
                 this.uiAnswerResult.text("Incorrect");
                 this.incorrectAnswerCount++;
+            } else { // time up
+                this.uiCorrectAnswer.text("The correct answer is: " + this.currentQuestion.answers[this.correctAnswerIndex].substr(1));
+                this.uiAnswerResult.text("Time up");
+                this.unansweredCount++;
             }
 
             this.uiAnswerDetails.html(this.currentQuestion.details || "");
@@ -311,19 +333,21 @@ $(document).ready(function () {
 
             this.setVisiblePane(this.uiAnswerPane);
 
-            setTimeout(function(){
+            setTimeout(function () {
                 var moreQuestions = self.displayNextQuestion();
-                if(!moreQuestions){
+                if (!moreQuestions) {
                     self.endQuiz();
                 }
             }, this.timing.answerShown);
         },
 
         displayQuestion: function (question) {
+            this.startTimer();
+
             this.uiQuestion.html(question.question);
-            if(question.question.length > 70) {
+            if (question.question.length > 70) {
                 this.uiQuestion.addClass("question-small-text");
-            }else{
+            } else {
                 this.uiQuestion.removeClass("question-small-text");
             }
 
@@ -340,7 +364,43 @@ $(document).ready(function () {
                 this.uiAnswers[i].answer.text(answer);
             }
         },
+
+        startTimer: function () {
+            if (this.questionTimer) throw "Error: timer already set.";
+            this.uiTimer.removeClass("time-up");
+
+            this.currentQuestionTime = this.timePerQuestion;
+            this.questionTimer = setInterval(this.onTimer_Tick.bind(this), 1000);
+            this.updateTimer();
+        },
+
+        stopTimer: function () {
+            if (this.questionTimer) {
+                clearInterval(this.questionTimer);
+                this.questionTimer = null;
+            }
+        },
+
+        onTimer_Tick: function (e) {
+            this.currentQuestionTime--;
+            this.updateTimer();
+
+            if (this.currentQuestionTime == 0) {
+                this.uiTimer.addClass("time-up");
+                this.selectAnswer(-1); // -1 indicates no selection made
+            }
+        },
+
+        updateTimer: function () {
+            var timerText = this.currentQuestionTime.toString();
+            while (timerText.length < 2) {
+                timerText = "0" + timerText;
+            }
+
+            this.uiTimer.text(timerText);
+        },
     };
+
 
     TriviaGame = game;
     TriviaGame.init();
