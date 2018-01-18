@@ -149,13 +149,26 @@
         color:orange;
     }
 
-    #answer-pane {
+    #answer-pane, #final-result-pane {
         background: url("../images/Backdrop-answer.png"), url("../images/backdrop_dim.png");
         font-family: "Cabin", sans-serif;
     }
 
-    #answer-pane>.single-row-button {
+    #answer-pane>.single-row-button,
+    #final-result-pane>.single-row-button {
         margin-top: 10px;
+    }
+
+    .final-results-details {
+        text-align: center;
+        line-height: 1.5;
+        padding-top: 30px;
+    }
+
+    #final-result-pane>.single-row-button>p {
+        padding-top: 12px;
+        font-size: 1.5rem;
+        font-family: "Monda";
     }
 
     #answer-details {
