@@ -71,7 +71,8 @@
         text-align: center;
     }
 
-    #start-button {
+    #start-button,
+    #restart-button {
         background: none;
         border: none;
         color: white;
@@ -155,10 +156,18 @@
         font-family: "Cabin", sans-serif;
     }
 
-    #answer-pane>.single-row-button,
-    #final-result-pane>.single-row-button {
+    #answer-pane>.single-row-button {
         margin-top: 10px;
     }
+
+    #results-label {
+        margin-top: 10px;
+
+    }
+
+    #restart-label {
+        margin-top: 200px;
+    }    
 
     .final-results-details {
         text-align: center;
