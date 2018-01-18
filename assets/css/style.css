@@ -20,6 +20,7 @@
         transform:scale(1.4);
         color: white;
         font-family: "Monda", sans-serif;
+        overflow: hidden;
     }
     h1 {
         font-size: 3rem;
@@ -257,4 +258,26 @@
 
     .clickable {
         cursor: pointer;
+    }
+
+    /* Probably better to scale this dynamically via javascript, but this is what I have for the moment. */
+    @media screen and (max-width: 1008px),
+           screen and (max-height: 672px) {
+        body {
+            transform:scale(1.0);
+        }
+    }
+
+    @media screen and (max-width: 720px),
+           screen and (max-height: 480px) {
+        body {
+            transform:scale(0.75);
+        }
+    }
+
+    @media screen and (max-width: 540px),
+           screen and (max-height: 360px) {
+        body {
+            transform:scale(0.5);
+        }
     }
