@@ -72,7 +72,9 @@
     }
 
     #start-button,
-    #restart-button {
+    #restart-button,
+    #million-button,
+    #quit-button {
         background: none;
         border: none;
         color: white;
@@ -80,6 +82,10 @@
         width: 400px;
         height: 100%;
         font-size: 1.5rem;
+    }
+
+    .normal-mode .single-row-button {
+        display: none;
     }
 
     #logo > p {
@@ -193,6 +199,10 @@
         height: 265px;
     }
 
+    .million-mode .answer-info {
+        display: none;
+    }
+
     #correct-answer {
         text-align: center;
         margin-bottom: 3em;
@@ -256,9 +266,61 @@
         top: 284px;
     }
 
+    #million-list {
+        font-family: "Monda", sans-serif;
+        padding-left: 280px;
+        padding-top: 15px;
+        /* Will use custom labels */
+        list-style-type: none;
+    }
+    .normal-mode #million-list {
+        display: none;
+    }
 
-    .mt-100 {
-        margin-top: 100px;
+    #million-list li {
+        color: orange;
+        line-height: 1.4;
+        padding-left: 1.2em;
+        /* For custom labels */
+        counter-increment: customlistcounter -1;
+    }
+    #million-list li:before {
+        /* For custom labels */
+        content: counter(customlistcounter) " ";
+        float: left;
+        width: 2em;
+    }
+    #million-list {
+        counter-reset: customlistcounter 13;
+    }
+
+    #million-list li.current-prize {
+        background: url("../images/prize_selection.png");
+        background-size: contain;
+        background-repeat: no-repeat;
+        color: black;
+    }
+    #million-list li.prize-breakpoint {
+        color: white;
+    }
+    #million-list li.missed-prize {
+        background: url("../images/prize_selection.png");
+        background-size: contain;
+        background-repeat: no-repeat;
+        color: red;
+    }
+    
+
+
+    #prize {
+        color: #FC0;
+    }
+
+    .mt-20 {
+        margin-top: 20px;
+    }
+    .mt-140 {
+        margin-top: 140px;
     }
 
     .hidden {

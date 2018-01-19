@@ -17,12 +17,19 @@
                 <p>Who wants to play
                     <br> A Trivia Quiz?</p>
             </div>
-            <div class="single-row-button mt-100">
+            <div class="single-row-button mt-20">
                 <button id="start-button">Start the quiz!</buton>
+            </div>
+            <div class="single-row-button mt-140">
+                <button id="million-button">Millionaire Mode!</buton>
             </div>
         </div>
 
-        <div id="question-pane" class="hidden pane">
+        <div id="question-pane" class="hidden pane normal-mode">
+            <!-- normal-mode and million-mode -->
+            <div class="single-row-button">
+                    <button id="quit-button">Walk away</buton>
+            </div>
             <p id="timer">30</p>
             <p id="question">question</p>
             <div id="answer-selection" class="hidden">
@@ -48,7 +55,8 @@
             </ol>
         </div>
 
-        <div id="answer-pane" class="hidden pane">
+        <div id="answer-pane" class="hidden pane normal-mode">
+            <!-- normal-mode and million-mode -->
             <div class="single-row-button">
                 <p id="answer-result">Correct!</p>
             </div>
@@ -57,7 +65,23 @@
                 <img id="answer-image" src="assets/images/answers/test.jpg">
                 <span id="answer-details">Some example text to test things out.</span>
             </div>
+            <ol reversed id="million-list">
+                <li class="prize-breakpoint">$1 MILLION</li>
+                <li>$500,000</li>
+                <li>$250,000</li>
+                <li>$150,000</li>
+                <li>$75,000</li>
+                <li class="prize-breakpoint">$50,000</li>
+                <li>$20,000</li>
+                <li>$10,000</li>
+                <li>$5,000</li>
+                <li>$2,000</li>
+                <li class="prize-breakpoint">$1,000</li>
+                <li>$500</li>
+            </ol>
         </div>
+
+
 
         <div id="final-result-pane" class="hidden pane">
             <div class="single-row-button" id="results-label">
@@ -74,11 +98,17 @@
                 <p>Unanswered questions:
                     <span id="tally-unanswered">0</span>
                 </p>
+                <br>
+                <br>
+                <p>Your prize:
+                    $<span id="prize">0</span>
+                </p>
             </div>
             <div id="restart-label" class="single-row-button">
                 <button id="restart-button">Start again</buton>
             </div>
-        </div> <!-- final-results-pane -->
+        </div>
+        <!-- final-results-pane -->
     </div>
 </body>
 
