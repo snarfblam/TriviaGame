@@ -288,5 +288,6 @@
            screen and (max-height: 360px) {
         body {
             transform:scale(0.5);
+            font-family: sans-serif;
         }
     }
