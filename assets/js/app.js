@@ -573,7 +573,7 @@ $(document).ready(function () {
             var prizeList = (this.unansweredCount + this.incorrectAnswerCount > 0) ?
                 this.millionairePrizes_loser : 
                 this.millionairePrizes_quitter;
-            this.uiPrize.text(prizeList[this.correctAnswerCount]);
+            this.uiPrize.text(prizeList[this.correctAnswerCount].toLocaleString());
 
             this.setVisiblePane(this.uiFinalResultPane);
         },
