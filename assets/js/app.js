@@ -457,10 +457,8 @@ $(document).ready(function () {
 
                 this.playerQuit = (index === -2);
                 this.selectedAnswerIndex = index;
-                // Hilight selected answer
                 this.setSelectedAnswerStyle();
  
-                // Wait a second, then tell user whether he was right or wrong
                 setTimeout(function () {
                     self.removeSelectedAnswerStyle();
                     self.displayAnswer();
@@ -489,15 +487,17 @@ $(document).ready(function () {
             this.selectAnswer(index);
         },
 
-
+        /** Applies the appropriate style to the selected answer element and displays the background image for it. */
         setSelectedAnswerStyle: function () {
-            if (this.selectedAnswerIndex >= 0) { // was a selection made?
-                // Then use the selection background and style
-                this.uiAnswers[this.selectedAnswerIndex].container.addClass("answer-selected");
-                this.uiSelection.removeClass("hidden").addClass("position-" + this.selectedAnswerIndex);
+            if (this.selectedAnswerIndex >= 0) { 
+                this.uiAnswers[this.selectedAnswerIndex].container
+                    .addClass("answer-selected");
+                this.uiSelection.removeClass("hidden")
+                                .addClass("position-" + this.selectedAnswerIndex);
             }
         },
 
+        /** Reverses effects of setSelectedAnswerStyle */
         removeSelectedAnswerStyle: function () {
             for (var i = 0; i < this.uiAnswers.length; i++) {
                 this.uiAnswers[i].container.removeClass("answer-selected");
@@ -515,29 +515,24 @@ $(document).ready(function () {
             this.playerQuit = false;
 
             if (this.millionaireMode) {
-                // Apply appropriate styles
                 this.uiAllPanes.addClass("million-mode")
-                    .removeClass("normal-mode");
+                               .removeClass("normal-mode");
 
-                // Question list -- Two from each of six 'rating's
                 this.questions = [];
-                for (var r = 0; r < 6; r++) {
-                    // Get questions with a rating of 'r'
+                for (var rating = 0; rating < 6; rating++) { // ratings range from 0 to 5
                     var applicableQuestions = this.allQuestions.filter(function (q) {
-                        return q.rating == r;
+                        return q.rating == rating;
                     });
 
-                    // Shuffle
+                    // Taking two randomly selected questions from each difficulty rating
                     this.shuffleArray(applicableQuestions);
-                    // Add the first two to our question list.
                     this.questions = this.questions.concat(applicableQuestions.slice(0, 2));
                 }
             } else {
-                // Apply appropriate styles
                 this.uiAllPanes.addClass("normal-mode")
                     .removeClass("million-mode");
 
-                // Select a number of random questions
+                // Taking ten randomly selected questions
                 this.questions = this.allQuestions.slice(0); // duplicate question list
                 this.shuffleArray(this.questions); // Randomize questions
                 this.questions = this.questions.slice(0, this.questionsPerGame); // Get rid of extras
@@ -560,12 +555,12 @@ $(document).ready(function () {
             this.uiTallyRight.text(this.correctAnswerCount);
             this.uiTallyUnanswered.text(this.unansweredCount);
 
-            // prize
             var prizeList = (this.unansweredCount + this.incorrectAnswerCount > 0) ?
                 this.millionairePrizes_loser :
                 this.millionairePrizes_quitter;
             this.uiPrize.text(prizeList[this.correctAnswerCount].toLocaleString());
-            // show/hide accordingly
+
+            // Prize display only applicable to millionaire mode
             if (this.millionaireMode) {
                 this.uiPrize.removeClass("hidden");
             } else {
@@ -629,7 +624,6 @@ $(document).ready(function () {
         displayAnswer: function () {
             var self = this;
 
-            // Update answer status text
             var correct = this.selectedAnswerIndex == this.correctAnswerIndex;
 
             if (correct) {
@@ -665,23 +659,18 @@ $(document).ready(function () {
                 }
             }
 
-            // Update answer details (for normal mode)
             this.uiAnswerDetails.html(this.currentQuestion.details || "");
             this.uiAnswerImage.attr("src", this.answerImagePath + this.currentQuestion.image);
 
-            // Display the answer pane
             this.setVisiblePane(this.uiAnswerPane);
 
-            // And then...
             setTimeout(function () {
-                // Display the next question, or...
                 var moreQuestions = self.displayNextQuestion();
 
-                // ...end game if no more questions
                 if (!moreQuestions) {
                     self.endQuiz();
                 }
-            // Delay based on game mode
+                // Time this pane is shown depends on game mode
             }, this.millionaireMode ? this.timing.millionAnswerShown : this.timing.answerShown);
         },
 
@@ -701,7 +690,6 @@ $(document).ready(function () {
 
                 // Asterisk marks the correct question
                 if (answer.charAt(0) == "*") {
-                    // Save the index and remove the asterisk
                     this.correctAnswerIndex = i;
                     answer = answer.substr(1);
                 }
