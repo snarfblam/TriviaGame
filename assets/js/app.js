@@ -1,82 +1,68 @@
 //@ts-check
 
-/*
-
-Question:
-    Present question, list of answers, timer
-    User makes correct selection:
-        Display correct message and appropriate image/sound
-    User makes incorrect selection/timer runs out:
-        Display appropriate message and present correct answer
-
-        */
-
-
-/*
-    Question object { question: string, answers[4]: string }
-        -The correct answer is prefixed with an asterisk
-*/
-
 var TriviaGame;
 
 $(document).ready(function () {
     var game = {
 
-        // Panes
-        uiIntroPane: $("#intro-pane"),
-        uiQuestionPane: $("#question-pane"),
-        uiAnswerPane: $("#answer-pane"),
-        uiFinalResultPane: $("#final-result-pane"),
-        uiPanes: [],
+        // UI elements
+            uiIntroPane: $("#intro-pane"),
+            uiQuestionPane: $("#question-pane"),
+            uiAnswerPane: $("#answer-pane"),
+            uiFinalResultPane: $("#final-result-pane"),
+            uiAllPanes: $(".pane"),
+            uiPaneList: [],
 
-        uiStartButton: $("#start-button"),
-        uiMillionButton: $("#million-button"),
-        uiRestartButton: $("#restart-button"),
-        uiQuitButton: $("#quit-button"),
-        uiTimer: $("#timer"),
-        uiQuestion: $("#question"),
-        uiAnswerList: $("#answer-list"),
-        uiAnswers: [],
-        uiSelection: $("#answer-selection"),
+            uiStartButton: $("#start-button"),
+            uiMillionButton: $("#million-button"),
+            uiRestartButton: $("#restart-button"),
+            uiQuitButton: $("#quit-button"),
+            uiTimer: $("#timer"),
+            uiQuestion: $("#question"),
+            uiAnswerList: $("#answer-list"),
+            uiAnswers: [],
+            uiSelection: $("#answer-selection"),
 
-        uiAnswerResult: $("#answer-result"),
-        uiCorrectAnswer: $("#correct-answer"),
-        uiAnswerImage: $("#answer-image"),
-        uiAnswerDetails: $("#answer-details"),
-        uiMillionList: $("#million-list"),
-        uiMillionItems: [],
+            uiAnswerResult: $("#answer-result"),
+            uiCorrectAnswer: $("#correct-answer"),
+            uiAnswerImage: $("#answer-image"),
+            uiAnswerDetails: $("#answer-details"),
+            uiMillionList: $("#million-list"),
+            uiMillionItems: [],
 
-        uiTallyRight: $("#tally-right"),
-        uiTallyWrong: $("#tally-wrong"),
-        uiTallyUnanswered: $("#tally-unanswered"),
-        uiPrize: $("#prize"),
+            uiTallyRight: $("#tally-right"),
+            uiTallyWrong: $("#tally-wrong"),
+            uiTallyUnanswered: $("#tally-unanswered"),
+            uiPrize: $("#prize"),
 
-        answerImagePath: "assets/images/answers/",
+        // "Constant"s
+            questionsPerGame: 10,
+            answerImagePath: "assets/images/answers/",
 
-        questionTimer: null,
-        currentQuestionTime: 0, // seconds
+        // Timing:
         timePerQuestion: 20, // seconds
-        questionsPerGame: 10,
-        timing: {
-            // delay after:
-            selectionMade: 3000,
-            answerShown: 5000,
+        questionTimer: null, // Interval handle
+        timing: { // delay after each, in ms.:
+            selectionMade: 1000,
+            answerShown: 6000,
+            millionAnswerShown: 4000,
         },
-        millionaireMode: false,
 
         // Per-game variables
-        currentQuestion: null,
-        questionIndex: -1,
-        correctAnswerCount: 0,
-        incorrectAnswerCount: 0,
-        unansweredCount: 0,
-        playerQuit: false,
+            currentQuestion: null,
+            questions: [],
+            questionIndex: -1,
+            correctAnswerCount: 0,
+            incorrectAnswerCount: 0,
+            unansweredCount: 0,
+            playerQuit: false, // true if player clicks the "walk away" button
+            millionaireMode: false,
 
         // Per-question variables
-        correctAnswerIndex: -1,
-        /** The selected answer, or -1 if no selection has been made (indicative if timer running out when checking if the correct answer was picked). */
-        selectedAnswerIndex: -1,
-        guessMade: false,
+            correctAnswerIndex: -1,
+            selectedAnswerIndex: -1, // -1 = time-up, -2 = 'walk away'. Magic numbers are magical <3
+            guessMade: false,
+            currentQuestionTime: 0, // seconds
 
         millionairePrizes_quitter: [ // prizes if you choose to quit without answering
             0,
@@ -108,55 +94,6 @@ $(document).ready(function () {
             50000,
             1000000,
         ],
-
-
-
-        init: function () {
-            var self = this;
-
-            var answerItems = $(".answer-text");
-            var answerContainers = $(".answer-item");
-
-            this.initAnswerElement($(answerItems[0]), $(answerContainers[0]));
-            this.initAnswerElement($(answerItems[1]), $(answerContainers[1]));;
-            this.initAnswerElement($(answerItems[2]), $(answerContainers[2]));;
-            this.initAnswerElement($(answerItems[3]), $(answerContainers[3]));;
-
-            this.uiPanes = [
-                this.uiIntroPane,
-                this.uiQuestionPane,
-                this.uiFinalResultPane,
-                this.uiAnswerPane,
-            ];
-
-            this.uiMillionList.children().each(function () {
-                self.uiMillionItems.push($(this)); // this == <li>
-            });
-
-            this.displayIntroPane();
-
-            this.uiStartButton.click(this.startButton_click.bind(this));
-            this.uiMillionButton.click(this.millionButton_click.bind(this));
-            this.uiRestartButton.click(this.restartButton_click.bind(this));
-            this.uiQuitButton.click(this.quitButton_click.bind(this));
-        },
-
-        /** Adds the specified element to this.uiAnswers and wires the click event */
-        initAnswerElement(jqAnswer, jqContainer) {
-            var self = this;
-            var index = this.uiAnswers.length;
-
-            this.uiAnswers.push({
-                answer: jqAnswer,
-                container: jqContainer,
-                index: index,
-            });
-            jqContainer.click(function (e) {
-                self.uiAnswers_click(e, index);
-            });
-        },
-
-        questions: [],
         allQuestions: [
             // Super easy
             {
@@ -272,13 +209,13 @@ $(document).ready(function () {
             {
                 question: "In the classic 1939 film <em>The Wizard of Oz</em>, the Wicked Witch of the West sports a large wart on which part of her face?",
                 answers: [
-                    "her nose",
-                    "*her chin",
-                    "her cheek",
-                    "her forehead",
+                    "Her nose",
+                    "*Her chin",
+                    "Her cheek",
+                    "Her forehead",
                 ],
                 image: "witch.jpg",
-                details: "Margaret Hamilton plays the Wicked Witch of the West as a green-skinned witch dressed in a long black dress with a black pointed hat",
+                details: "Margaret Hamilton plays the Wicked Witch of the West: a green-skinned witch in a black dress with a black pointed hat, and a wart on her chin.",
                 rating: 2,
             },
             {
@@ -456,12 +393,55 @@ $(document).ready(function () {
 
         ],
 
-        quitButton_click: function(e) {
-            this.selectAnswer(-2);
+
+        /** Initializes the game */
+        init: function () {
+            var self = this;
+
+            { // Additional UI querying
+                var answerItems = $(".answer-text");
+                var answerContainers = $(".answer-item");
+
+                this.initAnswerElement($(answerItems[0]), $(answerContainers[0]));
+                this.initAnswerElement($(answerItems[1]), $(answerContainers[1]));;
+                this.initAnswerElement($(answerItems[2]), $(answerContainers[2]));;
+                this.initAnswerElement($(answerItems[3]), $(answerContainers[3]));;
+
+                this.uiPaneList = [
+                    this.uiIntroPane,
+                    this.uiQuestionPane,
+                    this.uiFinalResultPane,
+                    this.uiAnswerPane,
+                ];
+
+                this.uiMillionList.children().each(function () {
+                    self.uiMillionItems.push($(this)); // this == <li>
+                });
+            }
+
+            { // Event wiring
+                this.uiStartButton.click(this.startButton_click.bind(this));
+                this.uiMillionButton.click(this.millionButton_click.bind(this));
+                this.uiRestartButton.click(this.restartButton_click.bind(this));
+                this.uiQuitButton.click(this.quitButton_click.bind(this));
+            }
+
+            this.displayIntroPane();
         },
 
-        uiAnswers_click: function (e, index) {
-            this.selectAnswer(index);
+        /** Adds the specified element to this.uiAnswers and wires the click event */
+        initAnswerElement(jqAnswer, jqContainer) {
+            var self = this;
+            var index = this.uiAnswers.length;
+
+            this.uiAnswers.push({
+                answer: jqAnswer,
+                container: jqContainer,
+                index: index,
+            });
+            jqContainer.click(function (e) {
+                self.uiAnswers_click(e, index);
+            });
         },
 
         /** Index of selected item, or -1 to indicate no selection was made (time up), or
@@ -475,10 +455,12 @@ $(document).ready(function () {
             if (!this.guessMade) {
                 this.guessMade = true;
 
-                this.playerQuit = index === -2;
+                this.playerQuit = (index === -2);
                 this.selectedAnswerIndex = index;
+                // Hilight selected answer
                 this.setSelectedAnswerStyle();
-
+ 
+                // Wait a second, then tell user whether he was right or wrong
                 setTimeout(function () {
                     self.removeSelectedAnswerStyle();
                     self.displayAnswer();
@@ -489,11 +471,22 @@ $(document).ready(function () {
         startButton_click: function (e) {
             this.startQuiz(false);
         },
+
         millionButton_click: function (e) {
             this.startQuiz(true);
         },
+
         restartButton_click: function (e) {
             this.startQuiz(this.millionaireMode);
+        },
+
+        quitButton_click: function (e) {
+            // "walk away"            
+            this.selectAnswer(-2);
+        },
+
+        uiAnswers_click: function (e, index) {
+            this.selectAnswer(index);
         },
 
 
@@ -512,6 +505,7 @@ $(document).ready(function () {
             }
         },
 
+        /** Initializes per-game variables and starts the game */
         startQuiz: function (boolMillionaireMode) {
             this.questionIndex = -1;
             this.correctAnswerCount = 0;
@@ -522,29 +516,25 @@ $(document).ready(function () {
 
             if (this.millionaireMode) {
                 // Apply appropriate styles
-                this.uiAnswerPane.addClass("million-mode")
-                    .removeClass("normal-mode");
-                this.uiQuestionPane.addClass("million-mode")
+                this.uiAllPanes.addClass("million-mode")
                     .removeClass("normal-mode");
 
                 // Question list -- Two from each of six 'rating's
                 this.questions = [];
-                for(var r = 0; r < 6; r++) {
+                for (var r = 0; r < 6; r++) {
                     // Get questions with a rating of 'r'
-                    var applicableQuestions = this.allQuestions.filter(function(q) {
+                    var applicableQuestions = this.allQuestions.filter(function (q) {
                         return q.rating == r;
                     });
-                    
+
                     // Shuffle
                     this.shuffleArray(applicableQuestions);
                     // Add the first two to our question list.
-                    this.questions = this.questions.concat(applicableQuestions.slice(0,2));
+                    this.questions = this.questions.concat(applicableQuestions.slice(0, 2));
                 }
             } else {
                 // Apply appropriate styles
-                this.uiAnswerPane.addClass("normal-mode")
-                    .removeClass("million-mode");
-                    this.uiQuestionPane.addClass("normal-mode")
+                this.uiAllPanes.addClass("normal-mode")
                     .removeClass("million-mode");
 
                 // Select a number of random questions
@@ -553,7 +543,7 @@ $(document).ready(function () {
                 this.questions = this.questions.slice(0, this.questionsPerGame); // Get rid of extras
             }
 
-            // Randomize order of answers for selected questions
+            // Randomize order of answers for selected questions (note- we are mutating the original objects here)
             this.questions.forEach(function (q) {
                 this.shuffleArray(q.answers);
             }, this);
@@ -564,6 +554,7 @@ $(document).ready(function () {
             }
         },
 
+        /** Displays the player's results */
         endQuiz: function () {
             this.uiTallyWrong.text(this.incorrectAnswerCount);
             this.uiTallyRight.text(this.correctAnswerCount);
@@ -571,9 +562,15 @@ $(document).ready(function () {
 
             // prize
             var prizeList = (this.unansweredCount + this.incorrectAnswerCount > 0) ?
-                this.millionairePrizes_loser : 
+                this.millionairePrizes_loser :
                 this.millionairePrizes_quitter;
             this.uiPrize.text(prizeList[this.correctAnswerCount].toLocaleString());
+            // show/hide accordingly
+            if (this.millionaireMode) {
+                this.uiPrize.removeClass("hidden");
+            } else {
+                this.uiPrize.addClass("hidden");
+            }
 
             this.setVisiblePane(this.uiFinalResultPane);
         },
@@ -588,9 +585,10 @@ $(document).ready(function () {
             }
         },
 
+        /** Displays the specified pane */
         setVisiblePane: function (jqPane) {
-            for (var i = 0; i < this.uiPanes.length; i++) {
-                var pane = this.uiPanes[i];
+            for (var i = 0; i < this.uiPaneList.length; i++) {
+                var pane = this.uiPaneList[i];
                 if (pane == jqPane) {
                     pane.removeClass("hidden");
                     pane.addClass("fade-in");
@@ -601,6 +599,7 @@ $(document).ready(function () {
             }
         },
 
+        /** Displays the introductory pane */
         displayIntroPane: function () {
             this.setVisiblePane(this.uiIntroPane);
         },
@@ -610,10 +609,10 @@ $(document).ready(function () {
             this.guessMade = false;
 
             // In millionaire mode, missing one question = game over
-            if(this.millionaireMode && (this.incorrectAnswerCount > 0 || this.unansweredCount > 0)) {
+            if (this.millionaireMode && (this.incorrectAnswerCount > 0 || this.unansweredCount > 0)) {
                 return false;
             }
-            if(this.playerQuit) return false;
+            if (this.playerQuit) return false;
 
             this.questionIndex++;
             if (this.questionIndex >= this.questions.length) return false; // no more questions
@@ -626,6 +625,7 @@ $(document).ready(function () {
             return true; // We found a question
         },
 
+        /** Displays the correct answer and whetever details ar pertinent to the selected game mode */
         displayAnswer: function () {
             var self = this;
 
@@ -636,9 +636,9 @@ $(document).ready(function () {
                 this.uiCorrectAnswer.text(this.currentQuestion.answers[this.correctAnswerIndex].substr(1));
                 this.uiAnswerResult.text("Correct!");
                 this.correctAnswerCount++;
-            } else if(this.playerQuit) {
+            } else if (this.playerQuit) { // walked away
                 this.uiAnswerResult.text("Walking away");
-            }else if (this.selectedAnswerIndex >= 0) { // incorrect
+            } else if (this.selectedAnswerIndex >= 0) { // incorrect
                 this.uiCorrectAnswer.text("The correct answer is: " + this.currentQuestion.answers[this.correctAnswerIndex].substr(1));
                 this.uiAnswerResult.text("Incorrect");
                 this.incorrectAnswerCount++;
@@ -653,9 +653,9 @@ $(document).ready(function () {
             var playerIsBadAndShouldFeelBad = (this.unansweredCount + this.incorrectAnswerCount) > 0;
             for (var i = 0; i < this.uiMillionItems.length; i++) {
                 var itemNumber = this.uiMillionItems.length - i; // 12 to 1
-                if (itemNumber == answeredQuestions) {
-                    if(playerIsBadAndShouldFeelBad) {
-                        this.uiMillionItems[i].addClass("missed-prize");
+                if (itemNumber == answeredQuestions) { // Current prize?
+                    if (playerIsBadAndShouldFeelBad) {
+                        this.uiMillionItems[i].addClass("missed-prize"); // Style indicating player did NOT get this prize
                     } else {
                         this.uiMillionItems[i].addClass("current-prize");
                     }
@@ -681,9 +681,11 @@ $(document).ready(function () {
                 if (!moreQuestions) {
                     self.endQuiz();
                 }
-            }, this.timing.answerShown);
+            // Delay based on game mode
+            }, this.millionaireMode ? this.timing.millionAnswerShown : this.timing.answerShown);
         },
 
+        /** Updates the contents of the question pane with the specified data */
         displayQuestion: function (question) {
             this.startTimer();
 
@@ -708,6 +710,7 @@ $(document).ready(function () {
             }
         },
 
+        /** Starts the question timer */
         startTimer: function () {
             if (this.questionTimer) throw "Error: timer already set.";
             this.uiTimer.removeClass("time-up");
@@ -717,6 +720,7 @@ $(document).ready(function () {
             this.updateTimer();
         },
 
+        /** Stops the question timer */
         stopTimer: function () {
             if (this.questionTimer) {
                 clearInterval(this.questionTimer);
@@ -724,6 +728,7 @@ $(document).ready(function () {
             }
         },
 
+        /** Tick tock */
         onTimer_Tick: function (e) {
             this.currentQuestionTime--;
             this.updateTimer();
@@ -734,6 +739,7 @@ $(document).ready(function () {
             }
         },
 
+        /** Updates question timer UI */
         updateTimer: function () {
             var timerText = this.currentQuestionTime.toString();
             while (timerText.length < 2) {
@@ -744,7 +750,8 @@ $(document).ready(function () {
         },
     };
 
-
+    // VSCode intellisense doesn't like it when you assign an object literal directly to a global variable
     TriviaGame = game;
+    // Start 'er up
     TriviaGame.init();
 });

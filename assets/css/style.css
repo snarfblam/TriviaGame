@@ -4,7 +4,9 @@
 @import url('https://fonts.googleapis.com/css?family=Francois+One');
 @import url('https://fonts.googleapis.com/css?family=Monda:700');
 
-/* General page/element styles */
+/*******************************************************
+ *   General page/element styles                       *
+ *******************************************************/
     html {
         height: 100%;
         /* font-family:  Orbitron, "Lucida Console", Consolas, monospace; */
@@ -34,6 +36,7 @@
         font-style: italic;
     }
 
+    /* Main content container */
     .main {
         margin: 0 auto;
         position: absolute;
@@ -46,6 +49,7 @@
         background: url("../images/backdrop_normal.png");
     }
 
+    /* Individual 'sub-pages' */
     .pane {
         position: absolute;
         left: 0;
@@ -57,35 +61,51 @@
         visibility: hidden;
     }
 
+    /* Styled div containing button */
+        .single-row-button {
+            width: 720px;
+            height: 50px;
+            background: url("../images/single-row-button.png");
+            text-align: center;
+        }
+        .single-row-button button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            width: 400px;
+            height: 100%;
+            font-size: 1.5rem;
+        }
+
+    /* Generic margin styles */
+        .mt-20 {
+            margin-top: 20px;
+        }
+        .mt-140 {
+            margin-top: 140px;
+        }
+
+    /* Utility styles */
+        .hidden {
+            display:  none;
+        }
+        .clickable {
+            cursor: pointer;
+        }
+        .fade-in {
+            opacity: 1;
+            transition: visibility 0s, opacity .3s;
+            visibility: visible;
+        }
+
+
+/*******************************************************
+ *   Intro Pane                                        *
+ *******************************************************/
+
     #intro-pane {
         text-align: center;
-    }
-
-    #logo {
-    }
-
-    .single-row-button {
-        width: 720px;
-        height: 50px;
-        background: url("../images/single-row-button.png");
-        text-align: center;
-    }
-
-    #start-button,
-    #restart-button,
-    #million-button,
-    #quit-button {
-        background: none;
-        border: none;
-        color: white;
-        cursor: pointer;
-        width: 400px;
-        height: 100%;
-        font-size: 1.5rem;
-    }
-
-    .normal-mode .single-row-button {
-        display: none;
     }
 
     #logo > p {
@@ -98,8 +118,18 @@
         padding-bottom: 2rem;
         text-shadow: -1px -1px 0px black, -1px 1px 0px black, 1px -1px 0px black, 1px 1px 0px black;
     }
+ 
+
+/*******************************************************
+ *   Question Pane                                     *
+ *******************************************************/
+
     #question-pane {
         background: url("../images/Backdrop_question.png"), url("../images/backdrop_dim.png");
+    }
+    
+   #question-pane.normal-mode #quit-button-container {
+        display: none;
     }
 
     #question {
@@ -112,51 +142,93 @@
         text-align: center;
     }
 
+    /* For longer questions  */
     #question.question-small-text {
         font-size: 1.25rem;
         top: 112px;
     }
 
-    .answer-item {
-        position: absolute;
-        width: 269px;
-        height: 20px;
-    }
-    .answer-selected>.answer-label {
-        color: white;
-    }
-    .answer-selected>.answer-text {
-        color: black;
+    #final-result-pane.normal-mode #prize-p {
+        display: none;
     }
 
-    .answer-item:nth-child(1) {
-        padding: 10px;
-        top: 220px;
-        left: 40px;
-    }
+    /* Answer buttons */
+        .answer-item {
+            position: absolute;
+            width: 269px;
+            height: 20px;
+        }
+        .answer-label {
+            color:orange;
+        }
+        .answer-item:nth-child(1) {
+            padding: 10px;
+            top: 220px;
+            left: 40px;
+        }
+        .answer-item:nth-child(2) {
+            padding: 10px;
+            top: 220px;
+            left: 400px;
+        }
+        .answer-item:nth-child(3) {
+            padding: 10px;
+            top: 288px;
+            left: 40px;
+        }
+        .answer-item:nth-child(4) {
+            padding: 10px;
+            top: 288px;
+            left: 400px;
+        }
 
-    .answer-item:nth-child(2) {
-        padding: 10px;
-        top: 220px;
-        left: 400px;
-    }
+    /* Selected answer button */
+        .answer-selected>.answer-label {
+            color: white;
+        }
+        .answer-selected>.answer-text {
+            color: black;
+        }
+        #answer-selection {
+            background: url("../images/selection.png");
+            width: 312px;
+            height: 48px;
+            position: absolute;
+        }
+        #answer-selection.position-0 {
+            left: 29px;
+            top: 217px;
+        }
+        #answer-selection.position-1 {
+            left: 389px;
+            top: 217px;
+        }
+        #answer-selection.position-2 {
+            left: 29px;
+            top: 284px;
+        }
+        #answer-selection.position-3 {
+            left: 389px;
+            top: 284px;
+        }
 
-    .answer-item:nth-child(3) {
-        padding: 10px;
-        top: 288px;
-        left: 40px;
-    }
+    /* Timer */
+        #timer {
+            position: absolute;
+            left: 50%;
+            font-size: 2rem;
+            bottom: 13px;
+            margin-left: -1rem;
+        }
+        #timer.time-up {
+            color: red;
+        }
 
-    .answer-item:nth-child(4) {
-        padding: 10px;
-        top: 288px;
-        left: 400px;
-    }
-
-    .answer-label {
-        color:orange;
-    }
-
+        
+/*******************************************************
+ *   Answer Pane                                       *
+ *******************************************************/
+        
     #answer-pane, #final-result-pane {
         background: url("../images/Backdrop-answer.png"), url("../images/backdrop_dim.png");
         font-family: "Cabin", sans-serif;
@@ -166,31 +238,9 @@
         margin-top: 10px;
     }
 
-    #results-label {
-        margin-top: 10px;
-
-    }
-
-    #restart-label {
-        margin-top: 200px;
-    }    
-
-    .final-results-details {
-        text-align: center;
-        line-height: 1.5;
-        padding-top: 30px;
-    }
-
-    #final-result-pane>.single-row-button>p {
-        padding-top: 12px;
-        font-size: 1.5rem;
-        font-family: "Monda";
-    }
-
     #answer-details {
         line-height: 1.5;
     }
-
     .answer-info {
         position: absolute;
         left: 80px;
@@ -224,112 +274,83 @@
         font-family: "Monda";
     }
 
-    #timer {
+    /* Prize list */
+        #million-list {
+            font-family: "Monda", sans-serif;
+            padding-left: 280px;
+            padding-top: 15px;
+            /* Will use custom labels */
+            list-style-type: none;
+            counter-reset: customlistcounter 13;
+        }
+        #million-list li {
+            color: orange;
+            line-height: 1.4;
+            padding-left: 1.2em;
+            /* For custom labels */
+            counter-increment: customlistcounter -1;
+        }
+        #million-list li:before {
+            /* For custom labels */
+            content: counter(customlistcounter) " ";
+            float: left;
+            width: 2em;
+        }
+        #million-list li.current-prize {
+            background: url("../images/prize_selection.png");
+            background-size: contain;
+            background-repeat: no-repeat;
+            color: black;
+        }
+        #million-list li.prize-breakpoint {
+            color: white;
+        }
+        #million-list li.missed-prize {
+            background: url("../images/prize_selection.png");
+            background-size: contain;
+            background-repeat: no-repeat;
+            color: red;
+        }
+        /* Hidden on normal mode */
+        .normal-mode #million-list {
+            display: none;
+        }
+
+
+/*******************************************************
+ *   Results Pane                                      *
+ *******************************************************/
+
+    #results-label {
+        margin-top: 10px;
+    }
+
+    #restart-button-container {
         position: absolute;
-        left: 50%;
-        font-size: 2rem;
-        bottom: 13px;
-        margin-left: -1rem;
+        left: 0px;
+        top: 400px;
+    }    
+
+    .final-results-details {
+        text-align: center;
+        line-height: 1.5;
+        padding-top: 30px;
     }
 
-    #timer.time-up {
-        color: red;
+    #final-result-pane>.single-row-button>p {
+        padding-top: 12px;
+        font-size: 1.5rem;
+        font-family: "Monda";
     }
-
-    .fade-in {
-        opacity: 1;
-        transition: visibility 0s, opacity .3s;
-        visibility: visible;
-    }
- 
-
-    #answer-selection {
-        background: url("../images/selection.png");
-        width: 312px;
-        height: 48px;
-        position: absolute;
-    }
-    #answer-selection.position-0 {
-        left: 29px;
-        top: 217px;
-    }
-    #answer-selection.position-1 {
-        left: 389px;
-        top: 217px;
-    }
-    #answer-selection.position-2 {
-        left: 29px;
-        top: 284px;
-    }
-    #answer-selection.position-3 {
-        left: 389px;
-        top: 284px;
-    }
-
-    #million-list {
-        font-family: "Monda", sans-serif;
-        padding-left: 280px;
-        padding-top: 15px;
-        /* Will use custom labels */
-        list-style-type: none;
-    }
-    .normal-mode #million-list {
-        display: none;
-    }
-
-    #million-list li {
-        color: orange;
-        line-height: 1.4;
-        padding-left: 1.2em;
-        /* For custom labels */
-        counter-increment: customlistcounter -1;
-    }
-    #million-list li:before {
-        /* For custom labels */
-        content: counter(customlistcounter) " ";
-        float: left;
-        width: 2em;
-    }
-    #million-list {
-        counter-reset: customlistcounter 13;
-    }
-
-    #million-list li.current-prize {
-        background: url("../images/prize_selection.png");
-        background-size: contain;
-        background-repeat: no-repeat;
-        color: black;
-    }
-    #million-list li.prize-breakpoint {
-        color: white;
-    }
-    #million-list li.missed-prize {
-        background: url("../images/prize_selection.png");
-        background-size: contain;
-        background-repeat: no-repeat;
-        color: red;
-    }
-    
-
 
     #prize {
         color: #FC0;
     }
 
-    .mt-20 {
-        margin-top: 20px;
-    }
-    .mt-140 {
-        margin-top: 140px;
-    }
 
-    .hidden {
-        display:  none;
-    }
-
-    .clickable {
-        cursor: pointer;
-    }
+/*******************************************************
+ *   Media Queries                                     *
+ *******************************************************/
 
     /* Probably better to scale this dynamically via javascript, but this is what I have for the moment. */
     @media screen and (max-width: 1008px),
