@@ -26,8 +26,7 @@
         </div>
 
         <div id="question-pane" class="hidden pane normal-mode">
-            <!-- normal-mode and million-mode -->
-            <div class="single-row-button">
+            <div id="quit-button-container" class="single-row-button">
                     <button id="quit-button">Walk away</buton>
             </div>
             <p id="timer">30</p>
@@ -49,14 +48,13 @@
                     <span class="answer-text">answer</span>
                 </li>
                 <li class="answer-item clickable">
-                    <span class="answer-label">D: </span>
+                    <span class="answer-label">D: </span> <!-- This question is dismayed D: -->
                     <span class="answer-text">answer</span>
                 </li>
             </ol>
         </div>
 
         <div id="answer-pane" class="hidden pane normal-mode">
-            <!-- normal-mode and million-mode -->
             <div class="single-row-button">
                 <p id="answer-result">Correct!</p>
             </div>
@@ -100,12 +98,12 @@
                 </p>
                 <br>
                 <br>
-                <p>Your prize:
+                <p id="prize-p">Your prize:
                     $ <span id="prize">0</span>
                 </p>
             </div>
-            <div id="restart-label" class="single-row-button">
-                <button id="restart-button">Start again</buton>
+            <div id="restart-button-container" class="single-row-button">
+                <button id="restart-button">Play again</buton>
             </div>
         </div>
         <!-- final-results-pane -->
