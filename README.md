@@ -1,5 +1,7 @@
 # Who Wants To Play A Trivia Quiz?
 ----
+Play now on [GitHub Pages](https://snarfblam.github.io/TriviaGame/).
+
 Trivia quiz game written in html/javascript. Features a gentler, kinder "normal mode" as well as a "millionaire mode" that gives out imaginary money like it's going out of style. Oh, there are some folders:
  - /**assets** - Contains everything that isn't index.html
    - /**css** - css files
